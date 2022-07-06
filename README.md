@@ -26,3 +26,8 @@ MODULES
     ...
 ```
 See the files in the `boards` directory of these repo for further examples.
+
+## More documentation
+Further documentation on usage of the driver along with needed parameter config can be found here:
+
+> [Sagetech MXS PX4 Support Driver](https://github.com/Sagetech-Avionics/Sagetech-Avionics.github.io/blob/main/documentation/PX4_MXS_PR.md)
