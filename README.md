@@ -16,7 +16,7 @@ In the `default.cmake` for the specific board used, add the line `transponder/sa
 │           └── default.cmake
 ```
 
-Enable driver in the "DRIVERS" segction of the `default.cmake` file:
+Enable driver in the "DRIVERS" section of the `default.cmake` file:
 ```
 ...
 DRIVERS
@@ -25,7 +25,7 @@ DRIVERS
 MODULES
     ...
 ```
-See the files in the `boards` directory of these repo for further examples.
+See the files in the `boards` directory of this repo for further examples.
 
 ## More documentation
 Further documentation on usage of the driver along with needed parameter config can be found here:
