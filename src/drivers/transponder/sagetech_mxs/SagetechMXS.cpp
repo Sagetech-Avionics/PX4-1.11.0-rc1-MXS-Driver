@@ -63,8 +63,6 @@ SagetechMXS::SagetechMXS(const char *port) :
 
 SagetechMXS::~SagetechMXS()
 {
-	free((char *)_port);
-
 	if (!(_fd < 0)) {
 		close(_fd);
 	}
@@ -74,6 +72,12 @@ SagetechMXS::~SagetechMXS()
 	perf_free(_loop_interval_perf);
 	perf_free(_sample_perf);
 	perf_free(_comms_errors);
+	perf_free(_comms_svr_rcv);
+	perf_free(_comms_msr_rcv);
+	perf_free(_comms_gps_snt);
+	perf_free(_comms_fid_snt);
+	perf_free(_comms_op_snt);
+
 }
 
 int SagetechMXS::task_spawn(int argc, char *argv[])
@@ -271,7 +275,11 @@ int SagetechMXS::print_status()
 	perf_print_counter(_loop_interval_perf);
 	perf_print_counter(_sample_perf);
 	perf_print_counter(_comms_errors);
-
+	perf_print_counter(_comms_svr_rcv);
+	perf_print_counter(_comms_msr_rcv);
+	perf_print_counter(_comms_gps_snt);
+	perf_print_counter(_comms_fid_snt);
+	perf_print_counter(_comms_op_snt);
 	return 0;
 }
 
@@ -727,6 +735,8 @@ void SagetechMXS::send_flight_id_msg()
 	uint8_t txComBuffer[SG_MSG_LEN_FLIGHT] {};
 	sgEncodeFlightId(txComBuffer, &mxs_state.fid, ++last.msg.id);
 	msg_write(txComBuffer, SG_MSG_LEN_FLIGHT);
+	perf_count(_comms_fid_snt);
+
 }
 
 void SagetechMXS::send_operating_msg()
@@ -785,6 +795,7 @@ void SagetechMXS::send_operating_msg()
 	uint8_t txComBuffer[SG_MSG_LEN_OPMSG] {};
 	sgEncodeOperating(txComBuffer, &mxs_state.op, ++last.msg.id);
 	msg_write(txComBuffer, SG_MSG_LEN_OPMSG);
+	perf_count(_comms_op_snt);
 }
 
 
@@ -851,6 +862,7 @@ void SagetechMXS::send_gps_msg()
 	uint8_t txComBuffer[SG_MSG_LEN_GPS] {};
 	sgEncodeGPS(txComBuffer, &gps, ++last.msg.id);
 	msg_write(txComBuffer, SG_MSG_LEN_GPS);
+	perf_count(_comms_gps_snt);
 }
 
 
@@ -911,6 +923,7 @@ void SagetechMXS::handle_packet(const Packet &msg)
 			sg_svr_t svr{};
 
 			if (sgDecodeSVR((uint8_t *) &msg, &svr)) {
+				perf_count(_comms_svr_rcv);
 				handle_svr(svr);
 			}
 
@@ -921,6 +934,7 @@ void SagetechMXS::handle_packet(const Packet &msg)
 			sg_msr_t msr{};
 
 			if (sgDecodeMSR((uint8_t *) &msg, &msr)) {
+				perf_count(_comms_msr_rcv);
 				handle_msr(msr);
 			}
 
