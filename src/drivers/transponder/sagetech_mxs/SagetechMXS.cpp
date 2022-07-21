@@ -74,6 +74,7 @@ SagetechMXS::~SagetechMXS()
 	perf_free(_comms_errors);
 	perf_free(_comms_svr_rcv);
 	perf_free(_comms_msr_rcv);
+	perf_free(_comms_ack_rcv);
 	perf_free(_comms_gps_snt);
 	perf_free(_comms_fid_snt);
 	perf_free(_comms_op_snt);
@@ -277,6 +278,7 @@ int SagetechMXS::print_status()
 	perf_print_counter(_comms_errors);
 	perf_print_counter(_comms_svr_rcv);
 	perf_print_counter(_comms_msr_rcv);
+	perf_print_counter(_comms_ack_rcv);
 	perf_print_counter(_comms_gps_snt);
 	perf_print_counter(_comms_fid_snt);
 	perf_print_counter(_comms_op_snt);
@@ -897,6 +899,7 @@ void SagetechMXS::handle_packet(const Packet &msg)
 	switch (msg.type) {
 	case MsgType::ACK:
 		if (sgDecodeAck((uint8_t *) &msg, &mxs_state.ack)) {
+			perf_count(_comms_ack_rcv);
 			handle_ack(mxs_state.ack);
 		}
 

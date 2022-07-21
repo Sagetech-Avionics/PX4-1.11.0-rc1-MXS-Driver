@@ -131,6 +131,7 @@ private:
 	perf_counter_t  _comms_errors{perf_alloc(PC_COUNT, MODULE_NAME": com_err")};
 	perf_counter_t  _comms_svr_rcv{perf_alloc(PC_COUNT, MODULE_NAME": com_svr_rcv")};
 	perf_counter_t  _comms_msr_rcv{perf_alloc(PC_COUNT, MODULE_NAME": com_msr_rcv")};
+	perf_counter_t  _comms_ack_rcv{perf_alloc(PC_COUNT, MODULE_NAME": com_ack_rcv")};
 	perf_counter_t  _comms_gps_snt{perf_alloc(PC_COUNT, MODULE_NAME": com_gps_snt")};
 	perf_counter_t  _comms_fid_snt{perf_alloc(PC_COUNT, MODULE_NAME": com_fid_snt")};
 	perf_counter_t  _comms_op_snt{perf_alloc(PC_COUNT, MODULE_NAME": com_op_snt")};
